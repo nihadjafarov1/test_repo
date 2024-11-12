@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Check if a directory argument is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <path_to_git_repository>"
+    exit 1
+fi
+
+# Navigate to the provided directory
+cd "$1" || { echo "Failed to change directory to $1"; exit 1; }
+
+# Check if the directory is a Git repository
+if [ ! -d ".git" ]; then
+    echo "This is not a Git repository. Please provide a valid Git repository path."
+    exit 1
+fi
+
 # Stage all changes (modified, deleted, and new files)
 git add -A > /dev/null 2>&1
 
