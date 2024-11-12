@@ -68,4 +68,4 @@ else
     echo "Failed to push changes to the remote repository."
 fi
 
-# gh pr create --base main --head Nihad --title "Nihad" --body " "
+# gh pr create --base main --head Nihad --title "Nihad" --body " " --reviewer BaxtiyarMammadyarov
