@@ -14,8 +14,6 @@ fi
 
 # Commit each modified, deleted, and new file individually
 for file in $staged_files; do
-    echo "Staging and committing file: $file"
-    
     # Unstage all files first
     git reset
 
@@ -34,6 +32,8 @@ for file in $staged_files; do
     fi
 
     # Commit the file with the appropriate message
-    echo "Committing: $commit_message"
     git commit -m "$commit_message"
+
+    # Print only the commit message
+    echo "$commit_message"
 done
