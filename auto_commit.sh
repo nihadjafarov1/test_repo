@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Stage all changes (modified, deleted, and new files)
-git add -A
+git add -A > /dev/null 2>&1
 
 # Get a list of staged files (modified, deleted, and new)
 staged_files=$(git status --porcelain | grep -E '^[AMDR]' | cut -c 4-)
@@ -15,10 +15,10 @@ fi
 # Commit each modified, deleted, and new file individually
 for file in $staged_files; do
     # Unstage all files first
-    git reset
+    git reset > /dev/null 2>&1
 
     # Stage the current file individually
-    git add "$file"
+    git add "$file" > /dev/null 2>&1
 
     # Check the type of change (added, modified, or deleted)
     file_status=$(git status --porcelain "$file" | cut -c 1-2)
@@ -32,7 +32,7 @@ for file in $staged_files; do
     fi
 
     # Commit the file with the appropriate message
-    git commit -m "$commit_message"
+    git commit -m "$commit_message" > /dev/null 2>&1
 
     # Print only the commit message
     echo "$commit_message"
