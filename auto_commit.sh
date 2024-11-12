@@ -35,15 +35,18 @@ for file in $staged_files; do
     # Stage the current file individually
     git add "$file" > /dev/null 2>&1
 
+    # Get the base name of the file (without path)
+    file_name=$(basename "$file")
+
     # Check the type of change (added, modified, or deleted)
     file_status=$(git status --porcelain "$file" | cut -c 1-2)
 
     if [ "$file_status" == "A " ]; then
-        commit_message="Add $file"
+        commit_message="Add $file_name"
     elif [ "$file_status" == "M " ]; then
-        commit_message="Update $file"
+        commit_message="Update $file_name"
     elif [ "$file_status" == "D " ]; then
-        commit_message="Delete $file"
+        commit_message="Delete $file_name"
     fi
 
     # Commit the file with the appropriate message
