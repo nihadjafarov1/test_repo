@@ -1,30 +1,24 @@
 #!/bin/bash
 
-# Stage all changes: modified, deleted, and new files
-git add -A
+# Get a list of all changed files (staged or unstaged)
+changed_files=$(git diff --name-only)
 
-# Get a list of staged files
-changed_files=$(git diff --name-only --cached)
-
-# Initialize an empty commit message
-commit_message=""
-
-# Loop through each changed file to create a message
+# Loop through each changed file and create an individual commit
 for file in $changed_files; do
-    # Check if the file is newly added, modified, or deleted
+    # Stage the current file only
+    git add "$file"
+    
+    # Determine the type of change for the file (Added, Modified, or Deleted)
     if git diff --cached --diff-filter=A --quiet -- "$file"; then
-        commit_message+="Added $file\n"
+        commit_message="Add $file"
     elif git diff --cached --diff-filter=M --quiet -- "$file"; then
-        commit_message+="Modified $file\n"
+        commit_message="Update $file"
     elif git diff --cached --diff-filter=D --quiet -- "$file"; then
-        commit_message+="Deleted $file\n"
+        commit_message="Delete $file"
+    else
+        commit_message="Update $file"
     fi
+
+    # Commit the current file with its specific commit message
+    git commit -m "$commit_message"
 done
-
-# If commit message is empty, use a default message
-if [ -z "$commit_message" ]; then
-    commit_message="Updated files"
-fi
-
-# Commit with the generated message
-git commit -m "$(echo -e "$commit_message")"
