@@ -66,6 +66,31 @@ if [ $? -eq 0 ]; then
     echo "Changes successfully pushed to the remote repository."
 else
     echo "Failed to push changes to the remote repository."
+    exit 1
 fi
 
-# gh pr create --base main --head Nihad --title "Nihad" --body " " --reviewer BaxtiyarMammadyarov
+# Create a pull request
+echo
+echo "Creating a pull request..."
+
+# Check if a PR already exists with the same base and head branches
+existing_pr=$(gh pr list --base dev --head Nihad --state open --json number --jq '. | length')
+
+if [ "$existing_pr" -gt 0 ]; then
+    echo "A pull request already exists from 'Nihad' to 'dev'."
+    exit 0
+fi
+
+# If no PR exists, create a new one
+gh pr create --base dev --head Nihad --title "Nihad" --body " " > /dev/null 2>&1
+
+# Check if PR creation was successful
+if [ $? -eq 0 ]; then
+    echo "Pull request created successfully."
+    exit 1
+else
+    echo "Failed to create the pull request."
+    exit 1
+fi
+
+
