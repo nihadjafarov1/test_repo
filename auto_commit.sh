@@ -29,7 +29,8 @@ fi
 
 # Commit each modified, deleted, and new file individually
 for file in $staged_files; do
-    # Unstage all files first
+    
+    # Unstage all files first to avoid committing multiple files in one go
     git reset > /dev/null 2>&1
 
     # Stage the current file individually
@@ -37,7 +38,7 @@ for file in $staged_files; do
 
     # Get the base name of the file (without path)
     file_name=$(basename "$file")
-
+    
     # Check the type of change (added, modified, or deleted)
     file_status=$(git status --porcelain "$file" | cut -c 1-2)
 
@@ -52,6 +53,19 @@ for file in $staged_files; do
     # Commit the file with the appropriate message
     git commit -m "$commit_message" > /dev/null 2>&1
 
-    # Print only the commit message
     echo "$commit_message"
 done
+
+# Push the changes to the remote repository
+echo
+echo "Pushing changes to remote repository..."
+git push > /dev/null 2>&1
+
+# Check if push was successful
+if [ $? -eq 0 ]; then
+    echo "Changes successfully pushed to the remote repository."
+else
+    echo "Failed to push changes to the remote repository."
+fi
+
+# gh pr create --base main --head Nihad --title "Nihad" --body " "
